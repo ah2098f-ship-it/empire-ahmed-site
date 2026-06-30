@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 إمبراطورية أحمد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background:#0a0a0a; color:#fff; direction:rtl; overflow-x:hidden; }
+        #loadingScreen {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: radial-gradient(circle at center, #1a0000 0%, #000000 100%);
+            position: relative; overflow: hidden; z-index: 9999;
+        }
+        #loadingScreen::before {
+            content: ''; position: absolute; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,215,0,0.1), transparent, rgba(255,0,0,0.1), transparent);
+            animation: rotate 20s linear infinite;
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .crown { font-size: 80px; z-index: 1; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .glow-text {
+            font-size: 3.5rem; color: #ffd700; text-shadow: 0 0 30px rgba(255,215,0,0.5), 0 0 60px rgba(255,215,0,0.3);
+            z-index: 1; margin: 20px 0; text-align: center; animation: neonPulse 2s infinite;
+        }
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 20px rgba(255,215,0,0.5), 0 0 40px rgba(255,215,0,0.3); }
+            50% { text-shadow: 0 0 40px rgba(255,215,0,0.8), 0 0 80px rgba(255,215,0,0.6); }
+        }
+        .shield-bar {
+            width: 300px; height: 4px; background: #333; margin: 20px auto; border-radius: 2px; overflow: hidden; z-index: 1; position: relative;
+        }
+        .shield-bar::after {
+            content: ''; display: block; height: 100%; width: 0%;
+            background: linear-gradient(90deg, #ffd700, #ff0000, #ffd700);
+            animation: loading 3s forwards;
+        }
+        @keyframes loading { 100% { width: 100%; } }
+        #mainContent { display: none; }
+        .navbar {
+            background: #1a0000; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #ffd700;
+        }
+        .logo { color: #ffd700; font-weight: bold; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .logo i { font-size: 2rem; }
+        .menu-toggle { color: #ffd700; font-size: 1.5rem; cursor: pointer; }
+
+        .side-menu {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+            background: #111; border-left: 2px solid #ffd700; transition: 0.3s ease; padding: 20px; z-index: 100;
+            overflow-y: auto;
+        }
+        .side-menu.open { right: 0; }
+        .side-menu .close-btn { color: #ffd700; font-size: 1.5rem; cursor: pointer; text-align: left; margin-bottom: 20px; }
+        .side-menu a {
+            display: flex; align-items: center; gap: 15px; color: #fff; padding: 15px 0;
+            border-bottom: 1px solid #222; text-decoration: none; transition: 0.3s; cursor: pointer;
+        }
+        .side-menu a:hover { color: #ffd700; }
+        .side-menu a i { width: 25px; color: #ffd700; }
+
+        .page { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .page.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .card {
+            background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px solid #ffd700;
+            text-align: center; transition: 0.3s;
+        }
+        .card:hover { transform: scale(1.05); }
+        .card i { font-size: 2.5rem; color: #ffd700; margin-bottom: 10px; }
+        .card h3 { color: #888; margin-bottom: 5px; }
+        .card p { color: #aaa; font-size: 0.9rem; }
+        .btn-gold {
+            background: #ffd700; color: #000; padding: 12px 20px; border: none; border-radius: 5px;
+            font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s;
+        }
+        .btn-gold:hover { transform: scale(1.02); background: #ffed4a; }
+        h2 { text-align: center; color: #ffd700; font-size: 1.6rem; margin: 20px 0; }
+
+        @media (max-width: 768px) { .navbar { flex-direction: column; align-items: center; } }
+    </style>
+</head>
+<body>
+    <div id="loadingScreen">
+        <div class="crown">👑</div>
+        <h1 class="glow-text">إمبراطورية أحمد</h1>
+        <div class="shield-bar"></div>
+        <p style="color:#888; z-index:1;">🔐 جاري تجهيز الإمبراطورية...</p>
+    </div>
+
+    <div id="mainContent">
+        <nav class="navbar">
+            <div class="logo"><i class="fas fa-crown"></i> إمبراطورية أحمد</div>
+            <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        </nav>
+
+        <div class="side-menu" id="sideMenu">
+            <div class="close-btn" onclick="toggleMenu()"><i class="fas fa-times"></i></div>
+            <a href="#" onclick="showPage('dashboard'); toggleMenu();"><i class="fas fa-home"></i> لوحة التحكم</a>
+            <a href="#" onclick="showPage('smm'); toggleMenu();"><i class="fas fa-bolt"></i> خدمات SMM</a>
+            <a href="#" onclick="showPage('store'); toggleMenu();"><i class="fas fa-shopping-cart"></i> المتجر</a>
+            <a href="#" onclick="showPage('jobs'); toggleMenu();"><i class="fas fa-briefcase"></i> الوظائف</a>
+            <a href="#" onclick="showPage('academy'); toggleMenu();"><i class="fas fa-graduation-cap"></i> الأكاديمية</a>
+            <a href="#" onclick="showPage('ads'); toggleMenu();"><i class="fas fa-ad"></i> الإعلانات</a>
+            <a href="#" onclick="showPage('apps'); toggleMenu();"><i class="fas fa-mobile-alt"></i> التطبيقات</a>
+            <a href="#" onclick="showPage('hosting'); toggleMenu();"><i class="fas fa-server"></i> الاستضافة</a>
+            <a href="#" onclick="showPage('offers'); toggleMenu();"><i class="fas fa-tags"></i> العروض</a>
+            <a href="#" onclick="showPage('ai'); toggleMenu();"><i class="fas fa-brain"></i> الذكاء الاصطناعي</a>
+            <a href="#" onclick="showPage('wallet'); toggleMenu();"><i class="fas fa-wallet"></i> المحفظة</a>
+            <a href="#" onclick="showPage('support'); toggleMenu();"><i class="fas fa-headset"></i> الدعم</a>
+            <a href="#" onclick="logout()" style="color:#e63946;"><i class="fas fa-sign-out-alt"></i> خروج</a>
+        </div>
+
+        <div id="dashboard" class="page active">
+            <h2>🏛️ لوحة التحكم الملكية</h2>
+            <div class="grid">
+                <div class="card"><i class="fas fa-coins"></i><h3>الرصيد</h3><p>$4,500.75</p></div>
+                <div class="card"><i class="fas fa-chart-line"></i><h3>طلبات اليوم</h3><p>42 طلب</p></div>
+                <div class="card"><i class="fas fa-crown"></i><h3>الرتبة</h3><p>إمبراطوري</p></div>
+            </div>
+        </div>
+
+        <div id="smm" class="page">
+            <h2>📣 خدمات SMM</h2>
+            <div class="grid">
+                <div class="card"><i class="fab fa-instagram"></i><h3>متابعين إنستغرام</h3><p>السعر: $5.00 / 1000</p></div>
+                <div class="card"><i class="fab fa-tiktok"></i><h3>مشاهدات تيك توك</h3><p>السعر: $3.50 / 10000</p></div>
+                <div class="card"><i class="fab fa-telegram"></i><h3>أعضاء تيليجرام</h3><p>السعر: $8.00 / 500</p></div>
+            </div>
+        </div>
+
+        <div id="store" class="page">
+            <h2>🛍️ المتجر الإلكتروني</h2>
+            <div class="grid">
+                <div class="card"><i class="fas fa-robot"></i><h3>بوت تيليجرام</h3><p>بوت رد تلقائي - $15.00</p></div>
+                <div class="card"><i class="fas fa-palette"></i><h3>تصاميم إنستغرام</h3><p>باقة 10 تصاميم - $10.00</p></div>
+            </div>
+        </div>
+
+        <div id="jobs" class="page">
+            <h2>💼 سوق الوظائف</h2>
+            <div class="grid">
+                <div class="card"><i class="fas fa-code"></i><h3>مطور ووردبريس</h3><p>راتب: $500 / مشروع</p></div>
+                <div class="card"><i class="fas fa-pen-fancy"></i><h3>مصمم جرافيك</h3><p>راتب: $300 / مشروع</p></div>
+            </div>
+        </div>
+
+        <div id="academy" class="page">
+            <h2>🎓 الأكاديمية</h2>
+            <div class="grid">
+                <div class="card"><i class="fab fa-python"></i><h3>دورة بايثون</h3><p>سعر: $40 - مع شهادة</p></div>
+                <div class="card"><i class="fas fa-laptop-code"></i><h3>دورة تطوير الويب</h3><p>سعر: $50 - مع شهادة</p></div>
+            </div>
+        </div>
+
+        <div id="ads" class="page">
+            <h2>📢 منصة الإعلانات</h2>
+            <div class="grid">
+                <div class="card"><i class="fas fa-bullhorn"></i><h3>حملة إنستغرام</h3><p>ميزانية: $20 / يوم</p></div>
+                <div class="card"><i class="fas fa-video"></i><h3>حملة تيك توك</h3><p>ميزانية: $15 / يوم</p></div>
+            </div>
+        </div>
+
+        <div id="apps" class="page">
+            <h2>📱 التطبيقات الجاهزة</h2>
+            <div class="grid">
+                <div class="card"><i class="fas fa-calculator"></i><h3>تطبيق حاسبة</h3><p>سعر: $8.00</p></div>
+                <div class="card"><i class="fas fa-clock"></i><h3>تطبيق ساعة</h3><p>سعر: $5.00</p></div>
+            </div>
+        </div>
+
+        <div id="hosting" class="page">
+            <h2>🌐 الاستضافة والدومينات</h2>
+            <div class="grid">
+                <div class="card"><i class="fas fa-server"></i><h3>استضافة 1 جيجابايت</h3><p>السعر: $5 / شهر</p></div>
+                <div class="card"><i class="fas fa-globe"></i><h3>نطاق .com</h3><p>السعر: $10 / سنة</p></div>
+            </div>
+        </div>
+
+        <div id="offers" class="page">
+            <h2>🔥 العروض اليومية</h2>
+            <div class="grid">
+                <div class="card"><i class="fas fa-percent"></i><h3>خصم 20%</h3><p>على خدمات إنستغرام لمدة 24 ساعة</p></div>
+                <div class="card"><i class="fas fa-gift"></i><h3>هدية مجانية</h3><p>100 متابع مجاني عند شراء باقة</p></div>
+            </div>
+        </div>
+
+        <div id="ai" class="page">
+            <h2>🤖 الذكاء الاصطناعي كخدمة</h2>
+            <div class="grid">
+                <div class="card"><i class="fas fa-check-circle"></i><h3>مجاني</h3><p>10 أسئلة تجريبية</p></div>
+                <div class="card"><i class="fas fa-gem"></i><h3>Basic</h3><p>500 سؤال - $4 / شهر</p></div>
+                <div class="card"><i class="fas fa-crown"></i><h3>Pro</h3><p>2000 سؤال - $8 / شهر</p></div>
+            </div>
+        </div>
+
+        <div id="wallet" class="page">
+            <h2>👛 المحفظة الرقمية</h2>
+            <div class="grid">
+                <div class="card"><i class="fas fa-mobile-alt" style="color:#25d366;"></i><h3>زين كاش</h3><p>رقم: 077860333563</p></div>
+                <div class="card"><i class="fas fa-university" style="color:#f39c12;"></i><h3>حوالة آسيا</h3><p>رقم: 07732554772</p></div>
+            </div>
+        </div>
+
+        <div id="support" class="page">
+            <h2>💬 مركز الدعم</h2>
+            <div class="card" style="border-color:#333;">
+                <p style="color:#888;">بوت الدعم الذكي يعمل هنا.</p>
+                <button class="btn-gold" onclick="alert('مرحباً بك في إمبراطورية أحمد!')">تواصل مع الدعم</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+        }, 3500);
+
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('open');
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function logout() {
+            if(confirm('هل أنت متأكد من الخروج؟')) {
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
